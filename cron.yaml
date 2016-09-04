@@ -1,0 +1,7 @@
+#https://cloud.google.com/appengine/docs/python/config/cron?hl=en
+
+cron:
+#- description: tiramisu lottery job
+#  url: /tiramisulottery
+#  schedule: every 1 hours from 09:00 to 19:00
+#  timezone: Europe/Rome
