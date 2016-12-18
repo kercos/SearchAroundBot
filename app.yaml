@@ -21,6 +21,15 @@ handlers:
   login: admin
   script: main.app
 
+- url: /get_webhook_info
+  login: admin
+  script: main.app
+
+- url: /delete_webhook
+  login: admin
+  script: main.app
+
+
 - url: /_ah/queue/deferred
   script: google.appengine.ext.deferred.deferred.application
   login: admin
