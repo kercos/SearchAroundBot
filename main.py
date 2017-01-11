@@ -237,6 +237,37 @@ def sendText(p, text, markdown=False, restartUser=False):
     else:
         tell(p.chat_id, 'Problems in sending text')
 
+# ================================
+# LEAVE CHAT
+# ================================
+
+def leaveChat(chat_id, title):
+    try:
+        data = {
+            'chat_id': chat_id,
+        }
+        resp = requests.post(key.BASE_URL + 'leaveChat', data)
+        logging.info('Leave Chat Response: {}'.format(resp.text))
+        tell(key.FEDE_CHAT_ID, 'Bot is leaving (super)group {}'.format(title))
+    except urllib2.HTTPError, err:
+        logging.info('Unknown exception: ' + str(err))
+
+
+def sendLocation(chat_id):
+    try:
+        resp = urllib2.urlopen(key.BASE_URL + 'leaveChat', urllib.urlencode({
+            'chat_id': chat_id,
+        })).read()
+        logging.info('send location: ')
+        logging.info(resp)
+    except urllib2.HTTPError, err:
+        if err.code == 403:
+            p = Person.query(Person.chat_id == chat_id).get()
+            p.enabled = False
+            p.put()
+            logging.info('Disabled user: ' + p.getUserInfoString())
+        else:
+            logging.info('Unknown exception: ' + str(err))
 
 # ================================
 # SEND LOCATION
@@ -832,7 +863,14 @@ class WebhookHandler(webapp2.RequestHandler):
             return
         # fr = message.get('from')
         chat = message['chat']
+
+        chat_type = chat['type'] if 'type' in chat else None
+        chat_title = chat['title'].encode('utf-8') if 'title' in chat else None
         chat_id = chat['id']
+        if chat_type=='group' or chat_type=='supergroup':
+            leaveChat(chat_id, chat_title)
+            return
+
         if "first_name" not in chat:
             return
         text = message.get('text').encode('utf-8') if "text" in message else ''
