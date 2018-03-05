@@ -1,22 +1,28 @@
 # -*- coding: utf-8 -*-
 
-# import json
-import sys
+# Set up requests
+# see https://cloud.google.com/appengine/docs/standard/python/issue-requests#issuing_an_http_request
+import requests_toolbelt.adapters.appengine
+requests_toolbelt.adapters.appengine.monkeypatch()
+from google.appengine.api import urlfetch
+urlfetch.set_default_fetch_deadline(20)
+#ignore warnings
+import warnings
+import urllib3.contrib.appengine
+warnings.filterwarnings('ignore', r'urllib3 is using URLFetch', urllib3.contrib.appengine.AppEnginePlatformWarning)
+
+
 import json
 import logging
 import urllib
 import urllib2
-import datetime
-from datetime import datetime
 from time import sleep
-import re
 import requests
 
 from utility import unindent
 
 # standard app engine imports
 from google.appengine.api import urlfetch
-from google.appengine.ext import ndb
 from google.appengine.ext import deferred
 from google.appengine.ext.db import datastore_errors
 
@@ -24,11 +30,8 @@ import key
 import person
 from person import Person
 import utility
-import jsonUtil
-import string
 
 import webapp2
-import random
 import osmQuery
 import osmEdit
 #from ConversionGrid import GRID
