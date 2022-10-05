@@ -520,7 +520,7 @@ def goToState1(p, input=None, **kwargs):
                     if remainingElementsCount>1 \
                     else 'is 1 other {} location'.format(type)
                 tell(p.chat_id, msg + \
-                     "There are {} within this radius. "
+                     "There {} within this radius. "
                      "Shall I send you an image with the map?".format(variableString),
                      kb=[[BUTTON_YES,BUTTON_NO]], one_time_keyboard=True)
         else: # no location found
